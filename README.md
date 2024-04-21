@@ -1,107 +1,132 @@
-# cdcq - A Cadence AST Query Tool
+# **cdcq - Uma Ferramenta para Consulta de AST em Cadence**
 
-cdcq is a powerful command-line tool that allows you to query and analyze the Abstract Syntax Tree (AST) of your Cadence smart contracts. 
+cdcq é uma poderosa ferramenta de linha de comando que permite consultar e analisar a Árvore de Sintaxe Abstrata (AST) dos seus contratos inteligentes em Cadence.
 
-## Usage
+## **Uso**
 
 ```bash
 cdcq <filename> <query>
 ```
 
+### **Exemplos**
 
-### Examples
-
-*List all functions in contract:*
+*Listar todas as funções no contrato:*
 
 ```bash
+bashCopy code
 ./cdcq ExampleToken.cdc ".Function | Access: {Function.Access} name: {Function.Identifier}"
+
 ```
 
-Output:
-```
+Resultado:
+
+```makefile
+makefileCopy code
 Access: AccessPublic name: withdraw
 Access: AccessPublic name: deposit
 Access: AccessPublic name: withdraw
 Access: AccessPublic name: deposit
 Access: AccessPublic name: createEmptyVault
 Access: AccessPublic name: mintTokens
+
 ```
 
-*List all composites with CompositeKind Resource:*
+*Listar todos os composites com CompositeKind Resource:*
 
 ```bash
+bashCopy code
 cdcq ExampleToken.cdc ".Composite[CompositeKind=~Resource] | {Composite.Identifier}"
+
 ```
-  
-Output:
-```cadence
+
+Resultado:
+
+```
+cadenceCopy code
  Vault
  VaultMinter
+
 ```
 
-*List resources and their conformances:*
+*Listar recursos e suas conformidades:*
 
 ```bash
-cdcq ExampleToken.cdc ".Composite[CompositeKind=~Resource] | {Composite.Identifier} {Composite.Conformances}" 
+bashCopy code
+cdcq ExampleToken.cdc ".Composite[CompositeKind=~Resource] | {Composite.Identifier} {Composite.Conformances}"
+
 ```
 
-Output:
-```cadence
+Resultado:
+
+```
+cadenceCopy code
  Vault [Provider Receiver Balance]
  VaultMinter []
+
 ```
 
-*List variable declarations:*
+*Listar declarações de variáveis:*
 
 ```bash
-cdcq ExampleToken.cdc ".Variable | variable: {Variable}"     
+bashCopy code
+cdcq ExampleToken.cdc ".Variable | variable: {Variable}"
+
 ```
 
-Output:
-```cadence
+Resultado:
+
+```
+cadenceCopy code
 variable: let recipientRef = recipient.borrow() ?? panic("Could not borrow a receiver reference to the vault")
 variable: let vault <- create Vault(balance: self.totalSupply)
+
 ```
 
-## Note:
+## **Nota:**
 
-Documentation is a bit lacking currently, let error messages guides you :)
+A documentação está um pouco deficiente atualmente, deixe que as mensagens de erro te guiem :)
 
 ```bash
+bashCopy code
 ./cdcq ExampleToken.cdc ".c | "
-```
-Output:
-```
-Invalid element type `c`.
-Available types: Array, Assignment, Attach, Attachment, Binary, Block, Bool, Break, Casting, Composite, Conditional, Continue, Create, Declaration, Destroy, Dictionary, Emit, EnumCase, Expression, Field, FixedPoint, For, Force, Function, FunctionBlock, FunctionExpression, Identifier, If, Import, Index, Integer, Interface, Invocation, Member, Nil, Path, Pragma, Program, Reference, Remove, Return, SpecialFunction, Statement, String, Swap, Switch, Transaction, Unary, Variable, Void, While
+
 ```
 
+Resultado:
 
-## Running on Multiple Files
+```mathematica
+mathematicaCopy code
+Tipo de elemento inválido `c`.
+Tipos disponíveis: Array, Assignment, Attach, Attachment, Binary, Block, Bool, Break, Casting, Composite, Conditional, Continue, Create, Declaration, Destroy, Dictionary, Emit, EnumCase, Expression, Field, FixedPoint, For, Force, Function, FunctionBlock, FunctionExpression, Identifier, If, Import, Index, Integer, Interface, Invocation, Member, Nil, Path, Pragma, Program, Reference, Remove, Return, SpecialFunction, Statement, String, Swap, Switch, Transaction, Unary, Variable, Void, While
 
-To analyze multiple Cadence files, use the `find` command. (You can add Path variable to output file name}:
+```
+
+## **Executando em Múltiplos Arquivos**
+
+Para analisar vários arquivos Cadence, use o comando **`find`**. (Você pode adicionar a variável Path para incluir o nome do arquivo no resultado):
 
 ```bash
+bashCopy code
 find . -type f -name "*.cdc" -exec cdcq {} ".Variable | {Path} variable: {Variable}" \;
+
 ```
 
-## Query Syntax
+## **Sintaxe de Consulta**
 
-A cdcq query consists of a filter and a display section, separated by a pipe (`|`).
+Uma consulta cdcq consiste em uma seção de filtro e uma seção de exibição, separadas por um pipe (**`|`**).
 
-### Filter
+### **Filtro**
 
-* **Select:** Start with a period (`.`) followed by the AST element type (e.g., `.Function`, `.Composite`).
-* **Choose:** Filter further using key-value pairs enclosed in square brackets (`[]`).
-    * **Key:** A valid field within the AST element.
-    * **Value:** The desired value to match. Prefix with `~` for "contains" matching.
-    * **Supported Operations:** `=` (exact match), `!=` (not equal).
+- **Seleção:** Começa com um ponto (**`.`**) seguido pelo tipo de elemento AST (por exemplo, **`.Function`**, **`.Composite`**).
+- **Escolha:** Filtre mais com pares chave-valor entre colchetes (**`[]`**).
+    - **Chave:** Um campo válido dentro do elemento AST.
+    - **Valor:** O valor desejado para corresponder. Use **`~`** para correspondência de "contém".
+    - **Operações Suportadas:** **`=`** (correspondência exata), **`!=`** (não igual).
 
-### Display
+### **Exibição**
 
-* A format string where variables are the AST element names from your filter, enclosed in curly braces (`{}`).
+- Uma string de formato onde as variáveis são os nomes dos elementos AST do seu filtro, entre chaves (**`{}`**).
 
-## Contributing
+## **Contribuindo**
 
-cdcq is an open-source project. We welcome contributions, issues, and feature requests. To get started, please refer to our contribution guidelines at [link to guidelines, if applicable].
-
+cdcq é um projeto de código aberto. Aceitamos contribuições, problemas e pedidos de recursos. Para começar, consulte nossas diretrizes de contribuição no [link para
